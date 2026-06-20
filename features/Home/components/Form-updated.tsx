@@ -3,36 +3,21 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Camera, Download, X } from "lucide-react";
-import * as htmlToImage from "html-to-image";
 import Cropper, { Area } from "react-easy-crop";
 
-// Pulled directly from the Adullam '26 flyer artwork
 const EVENT_DETAILS = {
   church: "Cherubim and Seraphim Movement Church",
   district: "Christ Royal Mandate District Headquarters (Ayo Ni O)",
-  title: "Adullam '26",
   theme: "The Pillar of Our Faith",
   dates: "13th – 15th August",
   venue:
     "The Mandate Arena, 31 Balogun Ketiku Street, Igando, Oko-Filling B/Stop, Lagos",
-  speakers: [
-    "Pro. Femi Ologbe",
-    "Pro. Musa Michael",
-    "Pst. Bayo Ojo",
-    "Pro. Abraham Adebayo",
-    "Pro. (Dr) Tunji Komolafe",
-    "Pst. Segun Michael",
-    "Pro. Moses Labade",
-    "Pro. Charles Oluwole",
-    "Pst. Moses Okesola",
-  ],
 };
-
-// ---- local crop helpers (no remote upload — everything stays on-device) ----
 
 function createImage(url: string): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const image = new Image();
+    image.crossOrigin = "anonymous";
     image.addEventListener("load", () => resolve(image));
     image.addEventListener("error", (error) => reject(error));
     image.src = url;
@@ -65,13 +50,34 @@ async function getCroppedImg(
   return canvas.toDataURL("image/png");
 }
 
+// Helper: Draw rounded rect
+function drawRoundedRect(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  width: number,
+  height: number,
+  radius: number,
+) {
+  ctx.beginPath();
+  ctx.moveTo(x + radius, y);
+  ctx.lineTo(x + width - radius, y);
+  ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+  ctx.lineTo(x + width, y + height - radius);
+  ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  ctx.lineTo(x + radius, y + height);
+  ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+  ctx.lineTo(x, y + radius);
+  ctx.quadraticCurveTo(x, y, x + radius, y);
+  ctx.closePath();
+}
+
 export default function AttendanceFlyerBuilder() {
   const [name, setName] = useState<string>("");
   const [previewPhoto, setPreviewPhoto] = useState<string>("");
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [nameError, setNameError] = useState<boolean>(false);
   const [fileError, setFileError] = useState<boolean>(false);
-  const flyerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Cropper state
@@ -85,7 +91,6 @@ export default function AttendanceFlyerBuilder() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Images only
     if (!file.type.startsWith("image/")) {
       setFileError(true);
       e.target.value = "";
@@ -102,7 +107,7 @@ export default function AttendanceFlyerBuilder() {
       setShowCropper(true);
     };
     reader.readAsDataURL(file);
-    e.target.value = ""; // allow re-selecting the same file later
+    e.target.value = "";
   };
 
   const onCropComplete = useCallback((_croppedArea: Area, pixels: Area) => {
@@ -127,49 +132,105 @@ export default function AttendanceFlyerBuilder() {
   };
 
   const handleDownload = async () => {
-    // Name is required before a download can happen
     if (!name.trim()) {
       setNameError(true);
       return;
     }
     setNameError(false);
 
-    if (!flyerRef.current) return;
     setIsDownloading(true);
 
     try {
-      await new Promise((r) => setTimeout(r, 500));
-      // const dataUrl = await htmlToImage.toPng(flyerRef.current, {
-      //   pixelRatio: 2,
-      //   quality: 1,
-      //   cacheBust: true,
-      //   skipFonts: false,
-      // });
-      const dataUrl = await htmlToImage.toPng(flyerRef.current, {
-        pixelRatio: 3, // Increase to 3 for higher density
-        quality: 1.0,
-        cacheBust: true,
-        // Force the canvas size to be larger than the displayed element
-        width: flyerRef.current.scrollWidth * 2,
-        height: flyerRef.current.scrollHeight * 2,
-        style: {
-          transform: "scale(2)",
-          transformOrigin: "top left",
-          width: flyerRef.current.scrollWidth + "px",
-          height: flyerRef.current.scrollHeight + "px",
+      // Ultra high resolution for maximum quality (4x scale)
+      const SCALE = 4;
+      const baseSize = 440;
+      const size = baseSize * SCALE;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = size;
+      canvas.height = size;
+
+      const ctx = canvas.getContext("2d", { willReadFrequently: true });
+      if (!ctx) throw new Error("Canvas context failed");
+
+      ctx.scale(SCALE, SCALE);
+
+      // Load background
+      const bgImg = await createImage("/AttendingAdullam.png");
+      ctx.drawImage(bgImg, 0, 0, baseSize, baseSize);
+
+      // Draw profile photo if exists
+      if (previewPhoto) {
+        const profileImg = await createImage(previewPhoto);
+        const profileSize = baseSize * 0.26;
+        const profileX = baseSize * 0.51 - profileSize / 2;
+        const profileY = baseSize * 0.82 - profileSize / 2;
+        const cornerRadius = profileSize * 0.1;
+
+        // Clipped rounded image
+        ctx.save();
+        drawRoundedRect(
+          ctx,
+          profileX,
+          profileY,
+          profileSize,
+          profileSize,
+          cornerRadius,
+        );
+        ctx.clip();
+        ctx.drawImage(profileImg, profileX, profileY, profileSize, profileSize);
+        ctx.restore();
+
+        // White border
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 2;
+        drawRoundedRect(
+          ctx,
+          profileX,
+          profileY,
+          profileSize,
+          profileSize,
+          cornerRadius,
+        );
+        ctx.stroke();
+
+        // Shadow
+        ctx.shadowColor = "rgba(0, 0, 0, 0.25)";
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 4;
+      }
+
+      // Draw text
+      ctx.fillStyle = "#360410";
+      ctx.font = "bold 20px Arial";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(`${name} will be attending`, baseSize / 2, baseSize * 0.98);
+
+      // Convert and download with maximum quality
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) throw new Error("Blob creation failed");
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.download = `${name.trim().replace(/\s+/g, "-")}-Adullam26-Flyer.jpg`;
+          link.href = url;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(url);
+          setIsDownloading(false);
         },
-      });
-      const link = document.createElement("a");
-      link.download = `${name.trim().replace(/\s+/g, "-")}-Adullam26-Flyer.png`;
-      link.href = dataUrl;
-      link.click();
+        "image/jpeg",
+        0.99, // Maximum JPEG quality (0.99)
+      );
     } catch (error) {
       console.error("Export failed:", error);
-    } finally {
+      alert("Download failed. Check browser console for details.");
       setIsDownloading(false);
     }
   };
-  const isLongName = name.length > 18;
 
   return (
     <div
@@ -183,7 +244,7 @@ export default function AttendanceFlyerBuilder() {
       }}
       id="trend-section"
     >
-      {/* 1. INPUTS (Not captured in image) */}
+      {/* INPUTS */}
       <div style={{ marginBottom: 24, fontFamily: "Arial, sans-serif" }}>
         <input
           type="text"
@@ -210,7 +271,6 @@ export default function AttendanceFlyerBuilder() {
           </p>
         )}
 
-        {/* Hidden local file input — images only */}
         <input
           ref={fileInputRef}
           type="file"
@@ -302,20 +362,19 @@ export default function AttendanceFlyerBuilder() {
         </button>
       </div>
 
-      {/* 2. FLYER PREVIEW (Captured as Image) — locked to a true 1:1 square */}
+      {/* PREVIEW */}
       <div
-        ref={flyerRef}
         style={{
           position: "relative",
           width: "100%",
           maxWidth: 440,
           aspectRatio: "1 / 1",
           margin: "0 auto",
-
           overflow: "hidden",
+          borderRadius: 8,
+          border: "1px solid #e0e0e0",
         }}
       >
-        {/* Background Flyer — square artwork, no portrait stretching */}
         <img
           src="/AttendingAdullam.png"
           alt="Flyer"
@@ -323,23 +382,18 @@ export default function AttendanceFlyerBuilder() {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: "center",
-            position: "absolute",
-            inset: 0,
-            zIndex: 0,
           }}
         />
 
-        {/* Profile Picture — sized as a % of the square so it scales with it */}
         {previewPhoto && (
           <div
             style={{
               position: "absolute",
-              top: "72%",
+              top: "71%",
               left: "51%",
               transform: "translate(-50%, -10%)",
-              width: "26%",
-              height: "26%",
+              width: "28%",
+              height: "28%",
               borderRadius: "10%",
               border: "clamp(2px, 0.8vw, 4px) solid white",
               overflow: "hidden",
@@ -352,25 +406,6 @@ export default function AttendanceFlyerBuilder() {
               alt="User"
               style={{ width: "100%", height: "100%", objectFit: "cover" }}
             />
-            {/* Name Overlay — directly under the picture */}
-            {/* <div
-              style={{
-                position: "absolute",
-                top: "90%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                width: "40%",
-                textAlign: "center",
-                color: "#4a332d",
-                fontSize: "12px",
-                fontWeight: "bold",
-                zIndex: 2,
-
-                textOverflow: "ellipsis",
-              }}
-            >
-              will be attending
-            </div> */}
           </div>
         )}
 
@@ -382,15 +417,10 @@ export default function AttendanceFlyerBuilder() {
             transform: "translate(-50%, -50%)",
             width: "100%",
             overflow: "visible",
-            // backgroundColor: "#360410",
             fontSize: "clamp(9px, 2.2vw, 16px)",
             lineHeight: 1.1,
-            whiteSpace: "normal",
-            wordBreak: "break-word",
             maxWidth: "85%",
             textAlign: "center",
-            textOverflow: "unset",
-
             color: "#360410",
             fontWeight: "bold",
             zIndex: 2,
@@ -400,7 +430,7 @@ export default function AttendanceFlyerBuilder() {
         </div>
       </div>
 
-      {/* CROP MODAL — mandatory, no skip; user must confirm a crop to proceed */}
+      {/* CROP MODAL */}
       {showCropper && imageSrc && (
         <div
           style={{
@@ -434,7 +464,6 @@ export default function AttendanceFlyerBuilder() {
                 cursor: "pointer",
                 color: "#4a332d",
                 padding: 4,
-                display: "flex",
               }}
             >
               <X size={22} />
@@ -473,7 +502,6 @@ export default function AttendanceFlyerBuilder() {
               value={zoom}
               onChange={(e) => setZoom(Number(e.target.value))}
               style={{ width: "100%", accentColor: "#8c6b61" }}
-              aria-label="Zoom"
             />
             <button
               onClick={handleConfirmCrop}
@@ -486,7 +514,6 @@ export default function AttendanceFlyerBuilder() {
                 border: "none",
                 borderRadius: 8,
                 fontWeight: 600,
-                fontSize: 15,
                 cursor: croppedAreaPixels ? "pointer" : "default",
                 opacity: croppedAreaPixels ? 1 : 0.6,
               }}
@@ -497,7 +524,7 @@ export default function AttendanceFlyerBuilder() {
         </div>
       )}
 
-      {/* EVENT HEADER — extracted from the flyer artwork */}
+      {/* EVENT INFO */}
       <div style={{ textAlign: "center", marginBottom: 12 }} className="mt-4">
         <p
           style={{
