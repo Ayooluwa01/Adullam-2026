@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     siteName: "Adullam '26",
     images: [
       {
-        url: "/adullam.png",
+        url: "/Adullam.png",
         width: 1200,
         height: 630,
         alt: "Adullam '26: The Pillar of Our Faith",
