@@ -181,81 +181,8 @@ export default function AttendanceFlyerBuilder() {
         fontFamily: "Georgia, 'Times New Roman', serif",
         boxSizing: "border-box",
       }}
+      id="trend-section"
     >
-      {/* EVENT HEADER — extracted from the flyer artwork */}
-      <div style={{ textAlign: "center", marginBottom: 28 }}>
-        <p
-          style={{
-            margin: 0,
-            fontSize: "clamp(10px, 2.6vw, 11px)",
-            letterSpacing: 1.5,
-            textTransform: "uppercase",
-            color: "#8c6b61",
-            fontFamily: "Arial, sans-serif",
-          }}
-        >
-          {EVENT_DETAILS.church}
-        </p>
-        <p
-          style={{
-            margin: "2px 0 10px",
-            fontSize: "clamp(10px, 2.4vw, 11px)",
-            letterSpacing: 1,
-            color: "#a98f86",
-            fontFamily: "Arial, sans-serif",
-          }}
-        >
-          {EVENT_DETAILS.district}
-        </p>
-        <h1
-          style={{
-            margin: 0,
-            fontSize: "clamp(28px, 8vw, 38px)",
-            color: "#4a332d",
-            fontWeight: 700,
-            letterSpacing: 0.5,
-          }}
-        >
-          {EVENT_DETAILS.title}
-        </h1>
-        <div
-          style={{
-            display: "inline-block",
-            marginTop: 8,
-            padding: "4px 14px",
-            background: "#4a332d",
-            color: "#f5d98c",
-            fontSize: "clamp(11px, 2.8vw, 12px)",
-            fontFamily: "Arial, sans-serif",
-            letterSpacing: 1,
-            borderRadius: 3,
-          }}
-        >
-          {EVENT_DETAILS.theme}
-        </div>
-        <p
-          style={{
-            margin: "14px 0 0",
-            fontSize: "clamp(13px, 3.4vw, 14px)",
-            color: "#4a332d",
-            fontFamily: "Arial, sans-serif",
-          }}
-        >
-          <strong>Date:</strong> {EVENT_DETAILS.dates}
-        </p>
-        <p
-          style={{
-            margin: "4px 0 0",
-            fontSize: "clamp(12px, 3.2vw, 13px)",
-            color: "#6b5650",
-            fontFamily: "Arial, sans-serif",
-            lineHeight: 1.4,
-          }}
-        >
-          <strong>Venue:</strong> {EVENT_DETAILS.venue}
-        </p>
-      </div>
-
       {/* 1. INPUTS (Not captured in image) */}
       <div style={{ marginBottom: 24, fontFamily: "Arial, sans-serif" }}>
         <input
@@ -569,6 +496,80 @@ export default function AttendanceFlyerBuilder() {
           </div>
         </div>
       )}
+
+      {/* EVENT HEADER — extracted from the flyer artwork */}
+      <div style={{ textAlign: "center", marginBottom: 12 }} className="mt-4">
+        <p
+          style={{
+            margin: 0,
+            fontSize: "clamp(10px, 2.6vw, 11px)",
+            letterSpacing: 1.5,
+            textTransform: "uppercase",
+            color: "#8c6b61",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          {EVENT_DETAILS.church}
+        </p>
+        <p
+          style={{
+            margin: "2px 0 10px",
+            fontSize: "clamp(10px, 2.4vw, 11px)",
+            letterSpacing: 1,
+            color: "#a98f86",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          {EVENT_DETAILS.district}
+        </p>
+        {/* <h1
+          style={{
+            margin: 0,
+            fontSize: "clamp(28px, 8vw, 38px)",
+            color: "#4a332d",
+            fontWeight: 700,
+            letterSpacing: 0.5,
+          }}
+        >
+          {EVENT_DETAILS.title}
+        </h1> */}
+        <div
+          style={{
+            display: "inline-block",
+            marginTop: 8,
+            padding: "4px 14px",
+            background: "#4a332d",
+            color: "#f5d98c",
+            fontSize: "clamp(11px, 2.8vw, 12px)",
+            fontFamily: "Arial, sans-serif",
+            letterSpacing: 1,
+            borderRadius: 3,
+          }}
+        >
+          {EVENT_DETAILS.theme}
+        </div>
+        <p
+          style={{
+            margin: "14px 0 0",
+            fontSize: "clamp(13px, 3.4vw, 14px)",
+            color: "#4a332d",
+            fontFamily: "Arial, sans-serif",
+          }}
+        >
+          <strong>Date:</strong> {EVENT_DETAILS.dates}
+        </p>
+        <p
+          style={{
+            margin: "4px 0 0",
+            fontSize: "clamp(12px, 3.2vw, 13px)",
+            color: "#6b5650",
+            fontFamily: "Arial, sans-serif",
+            lineHeight: 1.4,
+          }}
+        >
+          <strong>Venue:</strong> {EVENT_DETAILS.venue}
+        </p>
+      </div>
     </div>
   );
 }
