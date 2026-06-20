@@ -51,7 +51,8 @@ export const metadata: Metadata = {
     title: "Adullam '26: The Pillar of Our Faith",
     description:
       "Experience spiritual growth at Adullam '26. August 13th-15th at The Mandate Arena, Igando, Lagos.",
-    images: ["/Adullam.png"],
+    images:
+      "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
   },
 };
 
@@ -78,7 +79,8 @@ export default function RootLayout({
         addressCountry: "NG",
       },
     },
-    image: ["/Adullam.png"],
+    image:
+      "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
     description:
       "Annual program hosted by C&S Movement Church, Christ Royal Mandate District Headquarters.",
   };
