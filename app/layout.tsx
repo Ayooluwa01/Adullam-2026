@@ -46,7 +46,7 @@ export const metadata: Metadata = {
   title: "Adullam '26: The Pillar of Our Faith | C&S Movement Church",
   description:
     "Join us for Adullam '26: The Pillar of Our Faith at The Mandate Arena, Lagos, from August 13th - 15th. Hosted by the Cherubim and Seraphim Movement Church.",
-  metadataBase: new URL("https://yourdomain.com"), // Replace with your actual domain
+  metadataBase: new URL("https://adullam2026.vercel.app/"), // Replace with your actual domain
   openGraph: {
     title: "Adullam '26: The Pillar of Our Faith",
     description:
