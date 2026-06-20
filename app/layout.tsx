@@ -61,14 +61,16 @@ export const metadata: Metadata = {
     "Join us for Adullam '26: The Pillar of Our Faith at The Mandate Arena, Lagos, from August 13th - 15th. Hosted by the Cherubim and Seraphim Movement Church.",
   metadataBase: new URL("https://adullam2026.vercel.app/"),
   openGraph: {
+    type: "website",
+    url: "https://adullam2026.vercel.app/",
     title: "Adullam '26: The Pillar of Our Faith",
     description:
       "Experience spiritual growth at Adullam '26. August 13th-15th at The Mandate Arena, Igando, Lagos.",
     images: [
       {
-        url: "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
-        width: 1920,
-        height: 1080,
+        url: "/Adullam.png",
+        width: 1200,
+        height: 630,
         alt: "Adullam '26: The Pillar of Our Faith",
       },
     ],
