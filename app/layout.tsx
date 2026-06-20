@@ -42,20 +42,38 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+// export const metadata: Metadata = {
+//   title: "Adullam '26: The Pillar of Our Faith | C&S Movement Church",
+//   description:
+//     "Join us for Adullam '26: The Pillar of Our Faith at The Mandate Arena, Lagos, from August 13th - 15th. Hosted by the Cherubim and Seraphim Movement Church.",
+//   metadataBase: new URL("https://adullam2026.vercel.app/"), // Replace with your actual domain
+//   openGraph: {
+//     title: "Adullam '26: The Pillar of Our Faith",
+//     description:
+//       "Experience spiritual growth at Adullam '26. August 13th-15th at The Mandate Arena, Igando, Lagos.",
+//     images:
+//       "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
+//   },
+// };
 export const metadata: Metadata = {
   title: "Adullam '26: The Pillar of Our Faith | C&S Movement Church",
   description:
     "Join us for Adullam '26: The Pillar of Our Faith at The Mandate Arena, Lagos, from August 13th - 15th. Hosted by the Cherubim and Seraphim Movement Church.",
-  metadataBase: new URL("https://adullam2026.vercel.app/"), // Replace with your actual domain
+  metadataBase: new URL("https://adullam2026.vercel.app/"),
   openGraph: {
     title: "Adullam '26: The Pillar of Our Faith",
     description:
       "Experience spiritual growth at Adullam '26. August 13th-15th at The Mandate Arena, Igando, Lagos.",
-    images:
-      "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
+    images: [
+      {
+        url: "https://res.cloudinary.com/dcgxi0szf/image/upload/v1781946450/Adullam_yfmlgw.png",
+        width: 1920,
+        height: 1080,
+        alt: "Adullam '26: The Pillar of Our Faith",
+      },
+    ],
   },
 };
-
 export default function RootLayout({
   children,
 }: {
