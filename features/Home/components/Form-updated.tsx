@@ -311,7 +311,7 @@ export default function AttendanceFlyerBuilder() {
           maxWidth: 440,
           aspectRatio: "1 / 1",
           margin: "0 auto",
-          borderRadius: 16,
+
           overflow: "hidden",
         }}
       >
