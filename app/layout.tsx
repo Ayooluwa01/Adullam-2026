@@ -56,22 +56,24 @@ const geistMono = Geist_Mono({
 //   },
 // };
 export const metadata: Metadata = {
-  title: "Adullam '26: The Pillar of Our Faith | C&S Movement Church",
+  title: "Adullam '26 | C&S Movement Church", // 33 chars - better for Google
   description:
     "Join us for Adullam '26: The Pillar of Our Faith at The Mandate Arena, Lagos, from August 13th - 15th. Hosted by the Cherubim and Seraphim Movement Church.",
   metadataBase: new URL("https://adullam2026.vercel.app/"),
   openGraph: {
     type: "website",
     url: "https://adullam2026.vercel.app/",
-    title: "Adullam '26: The Pillar of Our Faith",
+    title: "Adullam '26: The Pillar of Our Faith", // Can be longer in OG
     description:
       "Experience spiritual growth at Adullam '26. August 13th-15th at The Mandate Arena, Igando, Lagos.",
+    siteName: "Adullam '26",
     images: [
       {
-        url: "/Adullam.png",
+        url: "/adullam.png",
         width: 1200,
         height: 630,
         alt: "Adullam '26: The Pillar of Our Faith",
+        type: "image/png",
       },
     ],
   },
