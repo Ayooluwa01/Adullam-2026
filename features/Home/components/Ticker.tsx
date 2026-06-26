@@ -7,7 +7,7 @@ const EVENT_DETAILS = {
   district: "Christ Royal Mandate District Headquarters (Ayo Ni O)",
   title: "Adullam '26",
   theme: "The Pillar of Our Faith",
-  dates: "13th – 15th August, 2026",
+  dates: "12th – 14th August, 2026",
   venue:
     "The Mandate Arena, 31 Balogun Ketiku Street, Igando, Oko-Filling B/Stop, Lagos",
   speakers: [
