@@ -9,7 +9,7 @@ const EVENT_DETAILS = {
   church: "Cherubim and Seraphim Movement Church",
   district: "Christ Royal Mandate District Headquarters (Ayo Ni O)",
   theme: "The Pillar of Our Faith",
-  dates: "13th – 15th August",
+  dates: "12th – 14th August",
   venue:
     "The Mandate Arena, 31 Balogun Ketiku Street, Igando, Oko-Filling B/Stop, Lagos",
 };
@@ -156,7 +156,7 @@ export default function AttendanceFlyerBuilder() {
       ctx.scale(SCALE, SCALE);
 
       // Load background
-      const bgImg = await createImage("/AttendingAdullam.png");
+      const bgImg = await createImage("");
       ctx.drawImage(bgImg, 0, 0, baseSize, baseSize);
 
       // Draw profile photo if exists
@@ -375,7 +375,7 @@ export default function AttendanceFlyerBuilder() {
           border: "1px solid #e0e0e0",
         }}
       >
-        <img
+        {/* <img
           src="/AttendingAdullam.png"
           alt="Flyer"
           style={{
@@ -383,8 +383,8 @@ export default function AttendanceFlyerBuilder() {
             height: "100%",
             objectFit: "cover",
           }}
-        />
-
+        /> */}
+        <h3>WILL BE RIGHT BACK</h3>
         {previewPhoto && (
           <div
             style={{
