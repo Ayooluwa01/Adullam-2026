@@ -376,7 +376,7 @@ export default function AttendanceFlyerBuilder() {
         }}
       >
         <img
-          src="/AttendingAdullam.png"
+          src="/AttendingAdullam.jpeg"
           alt="Flyer"
           style={{
             width: "100%",
