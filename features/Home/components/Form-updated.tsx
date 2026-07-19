@@ -375,7 +375,7 @@ export default function AttendanceFlyerBuilder() {
           border: "1px solid #e0e0e0",
         }}
       >
-        {/* <img
+        <img
           src="/AttendingAdullam.png"
           alt="Flyer"
           style={{
@@ -383,8 +383,8 @@ export default function AttendanceFlyerBuilder() {
             height: "100%",
             objectFit: "cover",
           }}
-        /> */}
-        <h3>WILL BE RIGHT BACK</h3>
+        />
+        {/* <h3>WILL BE RIGHT BACK</h3> */}
         {previewPhoto && (
           <div
             style={{
